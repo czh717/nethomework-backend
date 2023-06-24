@@ -3,6 +3,8 @@ package com.example.demo.enums;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public enum PacketTypeEnum {
+    @JsonProperty("Tap")
+    Tap("Tap"),
     @JsonProperty("Ethernet")
     Ethernet("Ethernet"),
     @JsonProperty("MAC")
