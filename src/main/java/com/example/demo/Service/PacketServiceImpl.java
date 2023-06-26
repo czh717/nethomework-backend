@@ -6,6 +6,7 @@ import com.example.demo.mapper.PacketMapper;
 import com.example.demo.vo.PacketVO;
 import com.example.demo.vo.RequestVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -61,5 +62,36 @@ public class PacketServiceImpl implements PacketService{
     @Override
     public List<Integer> getAllSerialId() {
         return packetMapper.getAllSerialId();
+    }
+
+    @Override
+    @Scheduled(cron = "* */1 * * * ?")
+    // 每分钟执行一次，获取网卡数据
+    public void receive() {
+        PacketVO packetVO = new PacketVO();
+        packetVO.setSerialId(getAllSerialId().size() + 1);
+        // 网卡接收Tap数据
+        String tapData = nativeMethods.tapRcv();
+        packetVO.setType(PacketTypeEnum.Tap);
+        packetVO.setContent(tapData);
+        packetMapper.insertPacket(packetVO);
+
+        // 解析为Mac数据
+        String macData = nativeMethods.ethRcv(tapData);
+        packetVO.setType(PacketTypeEnum.MAC);
+        packetVO.setContent(macData);
+        packetMapper.insertPacket(packetVO);
+
+        // 解析为Ip数据报文
+        String ipData = nativeMethods.ipRcv(macData);
+        packetVO.setType(PacketTypeEnum.IP);
+        packetVO.setContent(ipData);
+        packetMapper.insertPacket(packetVO);
+
+        // 解析为UDP数据
+        String udpData = nativeMethods.udpRcv(ipData);
+        packetVO.setType(PacketTypeEnum.UDP);
+        packetVO.setContent(udpData);
+        packetMapper.insertPacket(packetVO);
     }
 }
