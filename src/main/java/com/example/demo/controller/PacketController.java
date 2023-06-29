@@ -15,6 +15,7 @@ public class PacketController {
 
     @PostMapping("/send")
     public Response send(@RequestBody RequestVO requestVO) {
+        packetService.send(requestVO);
         return Response.buildSuccess();
     }
 
