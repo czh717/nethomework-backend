@@ -44,9 +44,9 @@ public class PacketServiceImpl implements PacketService{
 
         //调用虚拟网卡
         String tapData = nativeMethods.tapSend(macData);
-        packetVO.setType(PacketTypeEnum.Tap);
-        packetVO.setContent(tapData);
-        packetMapper.insertPacket(packetVO);
+//        packetVO.setType(PacketTypeEnum.Tap);
+//        packetVO.setContent(tapData);
+//        packetMapper.insertPacket(packetVO);
     }
 
     @Override
@@ -72,9 +72,9 @@ public class PacketServiceImpl implements PacketService{
         packetVO.setSerialId(getAllSerialId().size() + 1);
         // 网卡接收Tap数据
         String tapData = nativeMethods.tapRcv();
-        packetVO.setType(PacketTypeEnum.Tap);
-        packetVO.setContent(tapData);
-        packetMapper.insertPacket(packetVO);
+//        packetVO.setType(PacketTypeEnum.Tap);
+//        packetVO.setContent(tapData);
+//        packetMapper.insertPacket(packetVO);
 
         // 解析为Mac数据
         String macData = nativeMethods.ethRcv(tapData);
