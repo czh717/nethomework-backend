@@ -5,6 +5,8 @@
 
 extern void unset_tap(void);
 extern void set_tap(void);
+extern void write_to_tap(char *tap_name, int* nwrite, char* buffer);
+extern void read_from_tap(char *tap_name, int* nread, char* buffer);
 extern void delete_tap(int tapfd);
 extern int alloc_tap(char *dev);
 extern void gethwaddr_tap(int tapfd, unsigned char *ha);

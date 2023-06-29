@@ -177,3 +177,33 @@ void unset_tap(void)
 {
 	close(skfd);
 }
+
+void read_from_tap(char *tap_name, int* nread, char* buffer){
+    int fd;
+    fd = alloc_tap(tap_name);
+    if(tun_fd < 0){
+        perror("Allocating interface");
+        exit(1);
+    }
+    nread = read(fd, buffer, 1500);
+    if(nread < 0){
+        perror("Reading from interface");
+        close(fd);
+        exit(1);
+    }
+}
+
+void write_to_tap(char *tap_name, int* nwrite, char* buffer){
+    int fd;
+    fd = alloc_tap(tap_name);
+    if(tun_fd < 0){
+        perror("Allocating interface");
+        exit(1);
+    }
+    nwrite = cwrite(fd, buffer, strlen(buffer));
+    if(nwrite < 0){
+        perror("Writing to interface");
+        close(fd);
+        exit(1);
+    }
+}
